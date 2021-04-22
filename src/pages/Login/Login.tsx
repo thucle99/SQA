@@ -51,17 +51,17 @@ const Login = (props: Props) => {
       <div className="min-vh-100 row">
         <div className="col-md-6 m-auto">
           <form className="p-5 rounded-sm shadow text-center" onSubmit={submit}>
-            <Title>Login</Title>
-            <p className="text-muted">Please enter your login and password!</p>
+            <Title>Đăng nhập</Title>
+            <p className="text-muted">Nhập tài khoản và mật khẩu của bạn</p>
             <input
               type="text"
-              placeholder="Username"
+              placeholder="Tài khoản"
               onChange={handleUsername}
               className="form-control form-control-lg mb-4"
             />
             <input
               type="password"
-              placeholder="Password"
+              placeholder="Mật khẩu"
               onChange={handlePassword}
               className="form-control form-control-lg mb-4"
             />
@@ -69,7 +69,7 @@ const Login = (props: Props) => {
               <div className="mb-3 text-danger text-xl-center">{error}</div>
             )}
             <button type="submit" className="btn btn-block btn-info btn-lg">
-              Login
+              Đăng nhập
             </button>
           </form>
         </div>

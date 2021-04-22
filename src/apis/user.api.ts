@@ -20,7 +20,7 @@ export const loginApi = ({
           console.log("res", res)
         })
         .catch(function (error) {
-          reject(new Error("Login thất bại"))
+          reject(new Error("Tài khoản hoặc mật khẩu không chính xác"))
         })
     }, 100)
   })
