@@ -13,11 +13,11 @@ export const loginApi = ({
         .then(res => {
           resolve({
             data: {
-              access_token: "82jdu82193yh90sad83hxfgsd"
+              access_token: res.data.accessToken
             },
             message: "Login thành công"
           })
-          console.log("res", res)
+          console.log("res", res.data.accessToken)
         })
         .catch(function (error) {
           reject(new Error("Tài khoản hoặc mật khẩu không chính xác"))
