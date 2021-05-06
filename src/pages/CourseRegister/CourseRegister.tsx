@@ -1,20 +1,33 @@
 import React, { useState, useEffect } from "react"
+import { connect, ConnectedProps } from "react-redux"
 import MainLayout from "src/layouts/MainLayout"
 import styles from "./CourseRegister.module.scss"
-import { getCourse } from "../../apis/course.api"
-export default function CourseRegister() {
-  const [subjects, setSubjects] = useState([
-    { name: "Đảm bảo chất lượng phần mềm ", id: 1 },
-    { name: "Quản lý dự án ", id: 2 },
-    { name: "Lập trình hướng đối tượng ", id: 3 },
-    { name: "Các hệ thống phân tán", id: 4 }
-  ])
+import { getCourseList } from "./CourseRegister.thunks"
+import { getScheduleApi } from "../../apis/schedule.api"
 
-  useEffect(() => {
-    getCourse().then(res => {
+const mapStateToProps = (state: AppState) => ({
+  courseList: state.courseList.Course
+})
+
+const mapDispatchToProps = {
+  getCourseList
+}
+
+const connector = connect(mapStateToProps, mapDispatchToProps)
+
+interface Props extends ConnectedProps<typeof connector> {}
+const CourseRegister = (props: Props) => {
+  const { getCourseList, courseList } = props
+  const [listSchedule, setListSchedule] = useState<Room[] | []>([])
+  const schedule = id => {
+    getScheduleApi(id).then(res => {
+      setListSchedule(res.data)
       console.log("res", res.data)
     })
-  })
+  }
+  useEffect(() => {
+    getCourseList()
+  }, [getCourseList])
 
   return (
     <MainLayout>
@@ -22,9 +35,16 @@ export default function CourseRegister() {
         <div className={styles.listSubject}>
           <p className={styles.title}>Danh sách môn học</p>
           <div className={styles.tableSubject}>
-            {subjects.map((item, index) => (
-              <p className={styles.subject} key={index}>
-                {item.name}
+            {courseList.map((item, index) => (
+              <p
+                className={styles.subject}
+                key={index}
+                onClick={(event: React.MouseEvent<HTMLElement>) => {
+                  event.preventDefault()
+                  schedule(item.id)
+                }}
+              >
+                {item.ten}
               </p>
             ))}
           </div>
@@ -35,30 +55,30 @@ export default function CourseRegister() {
             <thead>
               <tr>
                 <th></th>
-                <th>Mã môn học</th>
+                <th>Id</th>
                 <th>Tên môn học</th>
-                <th>Nhóm môn học</th>
+                <th>Nhóm thực hành</th>
                 <th>Số tín chỉ</th>
-                <th>Mã lớp</th>
+                <th>Kíp học</th>
+                <th>Phòng học</th>
                 <th>Thứ</th>
-                <th>Tiết bắt đầu</th>
                 <th> Tuần</th>
               </tr>
             </thead>
             <tbody>
-              {subjects.map((item, index) => (
+              {listSchedule.map((item, index) => (
                 <tr className={styles.td} key={index}>
                   <td>
                     <input type="checkbox" />
                   </td>
-                  <td>0001</td>
-                  <td>03</td>
-                  <td>03</td>
-                  <td>03</td>
-                  <td>B17dccn594</td>
-                  <td>thứ 6</td>
-                  <td>tiết 4</td>
-                  <td>tuần 3</td>
+                  <td>{item.id}</td>
+                  <td>{item.ten}</td>
+                  <td>{item.nhomTH}</td>
+                  <td>{item.soTC}</td>
+                  <td>{item.kipHoc}</td>
+                  <td>{item.phong}</td>
+                  <td>{item.ngayHoc}</td>
+                  <td>{item.tuanHoc}</td>
                 </tr>
               ))}
             </tbody>
@@ -83,7 +103,7 @@ export default function CourseRegister() {
                 </tr>
               </thead>
               <tbody>
-                {subjects.map((item, index) => (
+                {courseList.map((item, index) => (
                   <tr className={styles.td} key={index}>
                     <td>
                       <input type="checkbox" />
@@ -106,3 +126,5 @@ export default function CourseRegister() {
     </MainLayout>
   )
 }
+
+export default connector(CourseRegister)

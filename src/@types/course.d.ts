@@ -1,10 +1,8 @@
 interface Course {
   id: number
-  ten: string
+  mota: string
   soTC: number
-  tuanhoc: string
-  ngayhoc: string
-  kiphoc: string
+  ten: string
 }
 
 interface ResGetCourseApi extends Res {

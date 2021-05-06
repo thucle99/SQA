@@ -17,7 +17,6 @@ export const loginApi = ({
             },
             message: "Login thành công"
           })
-          console.log("res", res.data.accessToken)
         })
         .catch(function (error) {
           reject(new Error("Tài khoản hoặc mật khẩu không chính xác"))
