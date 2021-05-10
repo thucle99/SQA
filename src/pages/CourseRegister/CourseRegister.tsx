@@ -2,29 +2,38 @@ import React, { useState, useEffect } from "react"
 import { connect, ConnectedProps } from "react-redux"
 import MainLayout from "src/layouts/MainLayout"
 import styles from "./CourseRegister.module.scss"
-import { getCourseList } from "./CourseRegister.thunks"
+import { getCourseList, getRoomList } from "./CourseRegister.thunks"
 import { getScheduleApi } from "../../apis/schedule.api"
+import { check } from "prettier"
+import * as actions from "./CourseRegister.action"
 
 const mapStateToProps = (state: AppState) => ({
-  courseList: state.courseList.Course
+  courseList: state.courseList.Course,
+  roomList: state.courseList.Room,
+  roomRegister: state.courseList.RoomRegister
 })
 
 const mapDispatchToProps = {
-  getCourseList
+  getCourseList,
+  getRoomList,
+  selectRoom: (payload: Room) => dispatch => {
+    return dispatch(actions.selectRoom(payload))
+  }
 }
 
 const connector = connect(mapStateToProps, mapDispatchToProps)
 
 interface Props extends ConnectedProps<typeof connector> {}
 const CourseRegister = (props: Props) => {
-  const { getCourseList, courseList } = props
-  const [listSchedule, setListSchedule] = useState<Room[] | []>([])
-  const schedule = id => {
-    getScheduleApi(id).then(res => {
-      setListSchedule(res.data)
-      console.log("res", res.data)
-    })
-  }
+  const {
+    getCourseList,
+    courseList,
+    getRoomList,
+    roomList,
+    selectRoom,
+    roomRegister
+  } = props
+
   useEffect(() => {
     getCourseList()
   }, [getCourseList])
@@ -41,7 +50,7 @@ const CourseRegister = (props: Props) => {
                 key={index}
                 onClick={(event: React.MouseEvent<HTMLElement>) => {
                   event.preventDefault()
-                  schedule(item.id)
+                  getRoomList(item.id)
                 }}
               >
                 {item.ten}
@@ -50,6 +59,7 @@ const CourseRegister = (props: Props) => {
           </div>
         </div>
 
+        <p className={styles.titleRegister}>Danh sách lớp học</p>
         <div className={styles.listRoom}>
           <table>
             <thead>
@@ -62,23 +72,30 @@ const CourseRegister = (props: Props) => {
                 <th>Kíp học</th>
                 <th>Phòng học</th>
                 <th>Thứ</th>
-                <th> Tuần</th>
+                <th>Tuần</th>
               </tr>
             </thead>
             <tbody>
-              {listSchedule.map((item, index) => (
+              {roomList.map((item, index) => (
                 <tr className={styles.td} key={index}>
                   <td>
-                    <input type="checkbox" />
+                    <input
+                      type="checkbox"
+                      checked={item.checked}
+                      onChange={() => {
+                        selectRoom(item)
+                      }}
+                      disabled={item.daDK}
+                    />
                   </td>
                   <td>{item.id}</td>
                   <td>{item.ten}</td>
                   <td>{item.nhomTH}</td>
                   <td>{item.soTC}</td>
-                  <td>{item.kipHoc}</td>
+                  <td>{item.kipHoc.toString()}</td>
                   <td>{item.phong}</td>
                   <td>{item.ngayHoc}</td>
-                  <td>{item.tuanHoc}</td>
+                  <td>{item.tuanHoc.toString()}</td>
                 </tr>
               ))}
             </tbody>
@@ -92,30 +109,37 @@ const CourseRegister = (props: Props) => {
               <thead>
                 <tr>
                   <th></th>
-                  <th>Mã môn học</th>
+                  <th>Id</th>
                   <th>Tên môn học</th>
-                  <th>Nhóm môn học</th>
+                  <th>Nhóm thực hành</th>
                   <th>Số tín chỉ</th>
-                  <th>Mã lớp</th>
+                  <th>Kíp học</th>
+                  <th>Phòng học</th>
                   <th>Thứ</th>
-                  <th>Tiết bắt đầu</th>
-                  <th> Tuần</th>
+                  <th>Tuần</th>
                 </tr>
               </thead>
               <tbody>
-                {courseList.map((item, index) => (
+                {roomRegister.map((item, index) => (
                   <tr className={styles.td} key={index}>
                     <td>
-                      <input type="checkbox" />
+                      <input
+                        type="checkbox"
+                        checked={item.checked}
+                        onChange={() => {
+                          selectRoom(item)
+                        }}
+                        disabled={item.daDK}
+                      />
                     </td>
-                    <td>0001</td>
-                    <td>03</td>
-                    <td>03</td>
-                    <td>03</td>
-                    <td>B17dccn594</td>
-                    <td>thứ 6</td>
-                    <td>tiết 4</td>
-                    <td>tuần 3</td>
+                    <td>{item.id}</td>
+                    <td>{item.ten}</td>
+                    <td>{item.nhomTH}</td>
+                    <td>{item.soTC}</td>
+                    <td>{item.kipHoc.toString()}</td>
+                    <td>{item.phong}</td>
+                    <td>{item.ngayHoc}</td>
+                    <td>{item.tuanHoc.toString()}</td>
                   </tr>
                 ))}
               </tbody>

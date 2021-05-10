@@ -1,10 +1,10 @@
 import axios from "axios"
 const token = localStorage.getItem("token")
-export const getCourseApi = (): Promise<ResGetCourseApi> =>
+export const getRoomApi = (id): Promise<ResGetRoomApi> =>
   new Promise((resolve, reject) => {
     setTimeout(() => {
       axios
-        .get("http://localhost:8080/dangky", {
+        .get(`http://localhost:8080/dangky/dslhp/${id}`, {
           headers: {
             Authorization: "Bearer " + token
           }

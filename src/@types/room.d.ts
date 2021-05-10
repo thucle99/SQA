@@ -1,13 +1,15 @@
 interface Room {
   id: number
-  kiphoc: any
-  ngayhoc: any
+  kipHoc: any
+  ngayHoc: any
   nhomTH: 1
   phong: string
   siSoToiDa: number
   soTC: number
   ten: string
   tuanHoc: any
+  daDK: boolean
+  checked: boolean
 }
 
 interface ResGetRoomApi extends Res {
