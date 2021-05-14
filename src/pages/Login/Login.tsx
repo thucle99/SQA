@@ -1,10 +1,9 @@
 import React, { useState } from "react"
 import { connect, ConnectedProps } from "react-redux"
-import { login } from "./Login.thunks"
-import { Title } from "./Login.styles"
 import { useHistory } from "react-router-dom"
 import { PATH } from "src/constants/paths"
-import { Button } from "antd"
+import { Title } from "./Login.styles"
+import { login } from "./Login.thunks"
 
 const mapStateToProps = state => ({
   loading: state.loading

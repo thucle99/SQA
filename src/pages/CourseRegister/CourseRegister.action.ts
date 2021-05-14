@@ -22,6 +22,17 @@ export const getRoomListSuccess = payload => {
   }
 }
 
+export const registerRoomRequested = () => ({
+  type: types.GET_ROOM_REQUESTED
+})
+
+export const registerRoomSuccess = payload => {
+  return {
+    type: types.GET_ROOM_SUCCESS,
+    payload
+  }
+}
+
 export const selectRoom = payload => {
   return {
     type: types.SELECT_ROOM,

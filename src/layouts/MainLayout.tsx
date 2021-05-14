@@ -19,7 +19,7 @@ export default function MainLayout(props: Props) {
         <Header className={styles.formHeader}>
           <Navigation />
         </Header>
-        <Layout>{props.children}</Layout>
+        <Layout>{children}</Layout>
         <Footer style={{ textAlign: "center" }}>Design by 105C7</Footer>
       </Layout>
     </div>

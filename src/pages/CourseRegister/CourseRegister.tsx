@@ -1,11 +1,13 @@
-import React, { useState, useEffect } from "react"
+import React, { useEffect } from "react"
 import { connect, ConnectedProps } from "react-redux"
 import MainLayout from "src/layouts/MainLayout"
-import styles from "./CourseRegister.module.scss"
-import { getCourseList, getRoomList } from "./CourseRegister.thunks"
-import { getScheduleApi } from "../../apis/schedule.api"
-import { check } from "prettier"
 import * as actions from "./CourseRegister.action"
+import styles from "./CourseRegister.module.scss"
+import {
+  getCourseList,
+  getRoomList,
+  registerRoom
+} from "./CourseRegister.thunks"
 
 const mapStateToProps = (state: AppState) => ({
   courseList: state.courseList.Course,
@@ -16,6 +18,7 @@ const mapStateToProps = (state: AppState) => ({
 const mapDispatchToProps = {
   getCourseList,
   getRoomList,
+  registerRoom,
   selectRoom: (payload: Room) => dispatch => {
     return dispatch(actions.selectRoom(payload))
   }
@@ -27,10 +30,11 @@ interface Props extends ConnectedProps<typeof connector> {}
 const CourseRegister = (props: Props) => {
   const {
     getCourseList,
-    courseList,
     getRoomList,
-    roomList,
     selectRoom,
+    registerRoom,
+    courseList,
+    roomList,
     roomRegister
   } = props
 
@@ -145,6 +149,12 @@ const CourseRegister = (props: Props) => {
               </tbody>
             </table>
           </div>
+        </div>
+        <div className={styles.action}>
+          <button onClick={() => registerRoom(roomRegister)}>
+            Lưu đăng ký
+          </button>
+          <button>Xóa</button>
         </div>
       </div>
     </MainLayout>

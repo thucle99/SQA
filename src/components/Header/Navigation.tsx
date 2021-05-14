@@ -29,10 +29,10 @@ const Navigation = (props: Props) => {
   const menu = (
     <Menu>
       <Menu.Item key="3">
-        <a onClick={() => handleLogout()}>Đăng xuất</a>
+        <div onClick={() => handleLogout()}>Đăng xuất</div>
       </Menu.Item>
       <Menu.Item key="4">
-        <a>Cài đặt</a>
+        <div>Cài đặt</div>
       </Menu.Item>
     </Menu>
   )
