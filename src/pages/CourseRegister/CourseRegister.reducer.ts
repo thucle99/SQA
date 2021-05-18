@@ -28,6 +28,7 @@ export const CourseListReducer = (state = initialState, action) =>
       case types.GET_ROOM_SUCCESS:
         draft.loading = false
         draft.Room = action.payload.map(item => {
+          item.isDelete=false;
           if (state.RoomRegister.some(obj => obj.id === item.id)) {
             item.checked = true
           } else item.checked = false
@@ -36,6 +37,29 @@ export const CourseListReducer = (state = initialState, action) =>
         break
       // check id trùng trong roon chọn thì check=true
 
+      case types.SELECT_ROOM:
+        let isExits = false
+        let data = state.RoomRegister.map(item => {
+          if (item.id === action.payload.id) { // trùng id
+            isExits = true
+            return {...item, checked:false}
+          } else {
+            return {...item, checked:true}
+          }
+        })
+        // trả về false nếu có tên trong list chọn đăng ký
+        if (!isExits) data.push({...action.payload,checked:true})
+        draft.loading = false
+        draft.Room = state.Room.map(item => {
+          return item.id === action.payload.id
+            ? { ...item,  checked: !item.checked}
+            : { ...item}
+          // bắt sự kiện click trùng tên thì đổi checked
+        })
+        draft.RoomRegister = data.filter(item=>item.checked==true)
+        break;
+
+        
       case types.REGISTRATION_LIST_ROOM_REQUESTED:
         draft.loading = true
         draft.RoomRegister = []
@@ -74,38 +98,6 @@ export const CourseListReducer = (state = initialState, action) =>
         console.log("RoomAfterDelete", state.RoomAfterDelete)
         draft.loading = false
         draft.RoomRegister = state.RoomAfterDelete
-        break
-
-      case types.SELECT_ROOM:
-        let isExits = true
-        let data = state.RoomRegister.map(item => {
-          if (item.ten === action.payload.ten) {
-            isExits = false
-            return (item = action.payload)
-          } else {
-            return item
-          }
-        })
-        // trả về false nếu trùng tên
-        if (isExits) data.push(action.payload)
-
-        draft.loading = false
-        draft.Room = state.Room.map(item => {
-          // item.isDelete = false
-          return item.id === action.payload.id
-            ? { ...item, checked: true, isDelete: false }
-            : { ...item, checked: false, isDelete: false }
-          // trùng id thì chuyển checked thành true
-        })
-        // draft.RoomRegister = data
-        draft.RoomRegister = data.map(item => {
-          //   return item.id === action.payload.id
-          //     ? { ...item, isDelete: true }
-          //     : { ...item, isDelete: false }
-          // })
-          // item.isDelete = false
-          return { ...item, isDelete: false }
-        })
         break
 
       case types.SELECT_ROOM_DELETE:
