@@ -5,3 +5,10 @@ export const checkExitRoom = (arr: any, room: any): boolean => {
   })
   return check
 }
+
+export const checkRoomDelete = (arr: any): Room => {
+  const finalArr = arr.filter(item => item.isDelete == false)
+  console.log("finalArr", finalArr)
+
+  return finalArr
+}

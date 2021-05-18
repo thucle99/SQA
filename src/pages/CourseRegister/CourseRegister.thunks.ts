@@ -39,3 +39,10 @@ export const updateRoom = data => dispatch => {
     .then(res => dispatch(actions.updateRoomSuccess(res)))
     .catch(err => Promise.reject(dispatch(actions.getItemFailed(err))))
 }
+
+export const deleteRoom = data => dispatch => {
+  dispatch(actions.deleteRoomRequested())
+  return updateRegisterRoomApi(data)
+    .then(res => dispatch(actions.deleteRoomSuccess(res)))
+    .catch(err => Promise.reject(dispatch(actions.getItemFailed(err))))
+}

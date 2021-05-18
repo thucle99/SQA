@@ -3,22 +3,24 @@ import { connect, ConnectedProps } from "react-redux"
 import { Popconfirm, message, Button } from "antd"
 import { QuestionCircleOutlined } from "@ant-design/icons"
 import MainLayout from "src/layouts/MainLayout"
-import * as actions from "./CourseRegister.action"
-import styles from "./CourseRegister.module.scss"
 import {
   getCourseList,
   getRoomList,
   getRegistrationList,
   registerRoom,
-  updateRoom
+  updateRoom,
+  deleteRoom
 } from "./CourseRegister.thunks"
-import { checkExitRoom } from "./handleFunction"
+import { checkExitRoom, checkRoomDelete } from "./handleFunction"
+import * as actions from "./CourseRegister.action"
+import styles from "./CourseRegister.module.scss"
 
 const mapStateToProps = (state: AppState) => ({
   courseList: state.courseList.Course,
   roomList: state.courseList.Room,
   roomRegister: state.courseList.RoomRegister,
-  registeredRoom: state.courseList.RegisteredRoom
+  registeredRoom: state.courseList.RegisteredRoom,
+  roomAfterDelete: state.courseList.RoomAfterDelete
 })
 
 const mapDispatchToProps = {
@@ -27,8 +29,12 @@ const mapDispatchToProps = {
   getRegistrationList,
   registerRoom,
   updateRoom,
+  deleteRoom,
   selectRoom: (payload: Room) => dispatch => {
     return dispatch(actions.selectRoom(payload))
+  },
+  selectRoomDelete: (payload: Room) => dispatch => {
+    return dispatch(actions.selectRoomDelete(payload))
   }
 }
 
@@ -43,10 +49,13 @@ const CourseRegister = (props: Props) => {
     selectRoom,
     registerRoom,
     updateRoom,
+    deleteRoom,
+    selectRoomDelete,
     courseList,
     roomList,
     roomRegister,
-    registeredRoom
+    registeredRoom,
+    roomAfterDelete
   } = props
 
   useEffect(() => {
@@ -55,6 +64,9 @@ const CourseRegister = (props: Props) => {
   }, [getCourseList])
   const handleSaveRoom = data => {
     registeredRoom[0] ? updateRoom(data) : registerRoom(data)
+  }
+  const handleDeleteRoom = data => {
+    deleteRoom(data)
   }
 
   return (
@@ -161,9 +173,9 @@ const CourseRegister = (props: Props) => {
                     <td>
                       <input
                         type="checkbox"
-                        // checked={item.checked}
+                        checked={item.isDelete}
                         onChange={() => {
-                          selectRoom(item)
+                          selectRoomDelete(item)
                         }}
                         // disabled={item.daDK}
                       />
@@ -188,9 +200,9 @@ const CourseRegister = (props: Props) => {
           <Popconfirm
             placement="topRight"
             title="Bạn có chắc muốn xóa môn học không？"
-            okText="Lưu"
+            okText="Xóa"
             cancelText="Hủy"
-            onConfirm={() => handleSaveRoom(roomRegister)}
+            onConfirm={() => handleDeleteRoom(roomAfterDelete)}
             icon={<QuestionCircleOutlined style={{ color: "red" }} />}
           >
             <Button>Xóa</Button>

@@ -10,6 +10,7 @@ interface Room {
   tuanHoc: any
   daDK: boolean
   checked: boolean
+  isDelete: boolean
 }
 
 interface ResGetRoomApi extends Res {

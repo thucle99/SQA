@@ -44,6 +44,17 @@ export const updateRoomSuccess = payload => {
 }
 // Update room
 
+export const deleteRoomRequested = () => ({
+  type: types.DELETE_ROOM_REQUESTED
+})
+export const deleteRoomSuccess = payload => {
+  return {
+    type: types.DELETE_ROOM_SUCCESS,
+    payload
+  }
+}
+// Delete room
+
 export const registrationListRoomRequested = () => ({
   type: types.REGISTRATION_LIST_ROOM_REQUESTED
 })
@@ -58,6 +69,13 @@ export const registerListRoomSuccess = payload => {
 export const selectRoom = payload => {
   return {
     type: types.SELECT_ROOM,
+    payload
+  }
+}
+
+export const selectRoomDelete = payload => {
+  return {
+    type: types.SELECT_ROOM_DELETE,
     payload
   }
 }
