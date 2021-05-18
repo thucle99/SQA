@@ -48,11 +48,14 @@
       cursor: pointer;
     }
   }
+  .isRegister {
+    background-color: #cecece;
+  }
   tbody tr:hover {
     background-color: #cecece;
   }
   thead tr {
-    background-color: #2d8ece;
+    background-color: #40a9ff;
   }
 }
 

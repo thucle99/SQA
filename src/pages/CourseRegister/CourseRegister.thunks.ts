@@ -2,6 +2,8 @@ import * as actions from "./CourseRegister.action"
 import { getCourseApi } from "src/apis/course.api"
 import { getRoomApi } from "src/apis/room.api"
 import { registerRoomApi } from "src/apis/register.api"
+import { getRegistrationListApi } from "src/apis/registrationList.api"
+import { updateRegisterRoomApi } from "src/apis/updateRegister.api"
 
 export const getCourseList = () => dispatch => {
   dispatch(actions.getCourseListRequested())
@@ -17,9 +19,23 @@ export const getRoomList = id => dispatch => {
     .catch(err => Promise.reject(dispatch(actions.getItemFailed(err))))
 }
 
+export const getRegistrationList = () => dispatch => {
+  dispatch(actions.registrationListRoomRequested())
+  return getRegistrationListApi()
+    .then(res => dispatch(actions.registerListRoomSuccess(res)))
+    .catch(err => Promise.reject(dispatch(actions.getItemFailed(err))))
+}
+
 export const registerRoom = data => dispatch => {
   dispatch(actions.registerRoomRequested())
   return registerRoomApi(data)
     .then(res => dispatch(actions.registerRoomSuccess(res)))
+    .catch(err => Promise.reject(dispatch(actions.getItemFailed(err))))
+}
+
+export const updateRoom = data => dispatch => {
+  dispatch(actions.updateRoomRequested())
+  return updateRegisterRoomApi(data)
+    .then(res => dispatch(actions.updateRoomSuccess(res)))
     .catch(err => Promise.reject(dispatch(actions.getItemFailed(err))))
 }

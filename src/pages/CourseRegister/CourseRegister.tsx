@@ -1,24 +1,32 @@
 import React, { useEffect } from "react"
 import { connect, ConnectedProps } from "react-redux"
+import { Popconfirm, message, Button } from "antd"
+import { QuestionCircleOutlined } from "@ant-design/icons"
 import MainLayout from "src/layouts/MainLayout"
 import * as actions from "./CourseRegister.action"
 import styles from "./CourseRegister.module.scss"
 import {
   getCourseList,
   getRoomList,
-  registerRoom
+  getRegistrationList,
+  registerRoom,
+  updateRoom
 } from "./CourseRegister.thunks"
+import { checkExitRoom } from "./handleFunction"
 
 const mapStateToProps = (state: AppState) => ({
   courseList: state.courseList.Course,
   roomList: state.courseList.Room,
-  roomRegister: state.courseList.RoomRegister
+  roomRegister: state.courseList.RoomRegister,
+  registeredRoom: state.courseList.RegisteredRoom
 })
 
 const mapDispatchToProps = {
   getCourseList,
   getRoomList,
+  getRegistrationList,
   registerRoom,
+  updateRoom,
   selectRoom: (payload: Room) => dispatch => {
     return dispatch(actions.selectRoom(payload))
   }
@@ -31,16 +39,23 @@ const CourseRegister = (props: Props) => {
   const {
     getCourseList,
     getRoomList,
+    getRegistrationList,
     selectRoom,
     registerRoom,
+    updateRoom,
     courseList,
     roomList,
-    roomRegister
+    roomRegister,
+    registeredRoom
   } = props
 
   useEffect(() => {
     getCourseList()
+    getRegistrationList()
   }, [getCourseList])
+  const handleSaveRoom = data => {
+    registeredRoom[0] ? updateRoom(data) : registerRoom(data)
+  }
 
   return (
     <MainLayout>
@@ -81,7 +96,12 @@ const CourseRegister = (props: Props) => {
             </thead>
             <tbody>
               {roomList.map((item, index) => (
-                <tr className={styles.td} key={index}>
+                <tr
+                  key={index}
+                  className={
+                    checkExitRoom(roomRegister, item) ? styles.isRegister : ""
+                  }
+                >
                   <td>
                     <input
                       type="checkbox"
@@ -89,7 +109,9 @@ const CourseRegister = (props: Props) => {
                       onChange={() => {
                         selectRoom(item)
                       }}
-                      disabled={item.daDK}
+                      disabled={
+                        checkExitRoom(registeredRoom, item) ? false : item.daDK
+                      }
                     />
                   </td>
                   <td>{item.id}</td>
@@ -121,21 +143,13 @@ const CourseRegister = (props: Props) => {
                   <th>Phòng học</th>
                   <th>Thứ</th>
                   <th>Tuần</th>
+                  <th></th>
                 </tr>
               </thead>
               <tbody>
                 {roomRegister.map((item, index) => (
                   <tr className={styles.td} key={index}>
-                    <td>
-                      <input
-                        type="checkbox"
-                        checked={item.checked}
-                        onChange={() => {
-                          selectRoom(item)
-                        }}
-                        disabled={item.daDK}
-                      />
-                    </td>
+                    <td></td>
                     <td>{item.id}</td>
                     <td>{item.ten}</td>
                     <td>{item.nhomTH}</td>
@@ -144,6 +158,16 @@ const CourseRegister = (props: Props) => {
                     <td>{item.phong}</td>
                     <td>{item.ngayHoc}</td>
                     <td>{item.tuanHoc.toString()}</td>
+                    <td>
+                      <input
+                        type="checkbox"
+                        // checked={item.checked}
+                        onChange={() => {
+                          selectRoom(item)
+                        }}
+                        // disabled={item.daDK}
+                      />
+                    </td>
                   </tr>
                 ))}
               </tbody>
@@ -151,10 +175,26 @@ const CourseRegister = (props: Props) => {
           </div>
         </div>
         <div className={styles.action}>
-          <button onClick={() => registerRoom(roomRegister)}>
-            Lưu đăng ký
-          </button>
-          <button>Xóa</button>
+          <Popconfirm
+            placement="topRight"
+            title="Bạn có chắc muốn lưu đăng ký không"
+            onConfirm={() => handleSaveRoom(roomRegister)}
+            okText="Lưu"
+            cancelText="Hủy"
+          >
+            <Button>Lưu đăng ký</Button>
+          </Popconfirm>
+
+          <Popconfirm
+            placement="topRight"
+            title="Bạn có chắc muốn xóa môn học không？"
+            okText="Lưu"
+            cancelText="Hủy"
+            onConfirm={() => handleSaveRoom(roomRegister)}
+            icon={<QuestionCircleOutlined style={{ color: "red" }} />}
+          >
+            <Button>Xóa</Button>
+          </Popconfirm>
         </div>
       </div>
     </MainLayout>
