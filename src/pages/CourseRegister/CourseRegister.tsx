@@ -11,7 +11,7 @@ import {
   updateRoom,
   deleteRoom
 } from "./CourseRegister.thunks"
-import { checkExitRoom, checkRoomDelete } from "./handleFunction"
+import { checkExitRoom, checkDisable } from "./handleFunction"
 import * as actions from "./CourseRegister.action"
 import styles from "./CourseRegister.module.scss"
 
@@ -20,7 +20,7 @@ const mapStateToProps = (state: AppState) => ({
   roomList: state.courseList.Room,
   roomRegister: state.courseList.RoomRegister,
   registeredRoom: state.courseList.RegisteredRoom,
-  roomAfterDelete: state.courseList.RoomDelete
+  roomDelete: state.courseList.RoomDelete
 })
 
 const mapDispatchToProps = {
@@ -55,7 +55,7 @@ const CourseRegister = (props: Props) => {
     roomList,
     roomRegister,
     registeredRoom,
-    roomAfterDelete
+    roomDelete
   } = props
 
   useEffect(() => {
@@ -177,7 +177,6 @@ const CourseRegister = (props: Props) => {
                         onChange={() => {
                           selectRoomDelete(item)
                         }}
-                        // disabled={item.daDK}
                       />
                     </td>
                   </tr>
@@ -194,7 +193,13 @@ const CourseRegister = (props: Props) => {
             okText="Lưu"
             cancelText="Hủy"
           >
-            <Button>Lưu đăng ký</Button>
+            {/* <Button disabled={roomRegister==registeredRoom 
+                || roomDelete.length!=0 ? true:false}>
+                Lưu đăng ký
+                </Button> */}
+                 <Button disabled={checkDisable(roomRegister,registeredRoom,roomDelete)}>
+                Lưu đăng ký
+                </Button>
           </Popconfirm>
 
           <Popconfirm
@@ -202,10 +207,10 @@ const CourseRegister = (props: Props) => {
             title="Bạn có chắc muốn xóa môn học không？"
             okText="Xóa"
             cancelText="Hủy"
-            onConfirm={() => handleDeleteRoom(roomAfterDelete)}
+            onConfirm={() => handleDeleteRoom(roomDelete)}
             icon={<QuestionCircleOutlined style={{ color: "red" }} />}
           >
-            <Button>Xóa</Button>
+            <Button disabled={roomDelete.length==0 ? true:false}>Xóa</Button>
           </Popconfirm>
         </div>
       </div>

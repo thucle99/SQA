@@ -74,6 +74,8 @@ export const CourseListReducer = (state = initialState, action) =>
         })
         // trả về false nếu có tên trong list chọn đăng ký
         if (!isExits) data.push({ ...action.payload, checked: true })
+        // console.log("RegisteredRoom", state.RegisteredRoom);
+        // console.log("RoomRegister", data);
         draft.loading = false
         draft.Room = state.Room.map(item => {
           return item.id === action.payload.id
@@ -91,9 +93,9 @@ export const CourseListReducer = (state = initialState, action) =>
         const dataUpdate=state.RoomRegister.map(item=>{
           return {...item,daDK:true}
         })
-        console.log("Room",state.Room);
-        console.log("RegisteredRoom",dataUpdate);
-        console.log("RoomRegister",dataUpdate);
+        // console.log("Room",state.Room);
+        // console.log("RegisteredRoom",dataUpdate);
+        // console.log("RoomRegister",dataUpdate);
         
         draft.loading = false
         draft.RegisteredRoom = dataUpdate
@@ -120,8 +122,11 @@ export const CourseListReducer = (state = initialState, action) =>
         })
         // trả về false nếu có tên trong list chọn đăng ký
         // if (!isExitsDelete) dataDelete.push({ ...action.payload, checked: true })
-        console.log("data xóa", dataDelete.filter(item => item.isDelete == true))
-        console.log("data còn lại", dataDelete.filter(item => item.isDelete == false))
+        // console.log("data xóa", dataDelete.filter(item => item.isDelete == true))
+        // console.log("data còn lại", dataDelete.filter(item => item.isDelete == false))
+        // console.log("RegisteredRoom", state.RegisteredRoom);
+        // console.log("RoomRegister", dataDelete);
+        
 
         // const dataConLai=action.payload.map(item => {
         //   item.isDelete = false
@@ -150,11 +155,11 @@ export const CourseListReducer = (state = initialState, action) =>
             return {...item,checked :false,isDelete : !item.isDelete,daDK:false}
           } else  return {...item}
         })
-        console.log("Room",finalRoomDelete);
-        console.log("RegisteredRoom", state.RoomAfterDelete);
-        console.log("RoomRegister", state.RoomAfterDelete);
-        // check nếu RoomDelete có trong Room
-        console.log("finalRoomDelete",finalRoomDelete )
+        // console.log("Room",finalRoomDelete);
+        // console.log("RegisteredRoom", state.RoomAfterDelete);
+        // console.log("RoomRegister", state.RoomAfterDelete);
+        // // check nếu RoomDelete có trong Room
+        // console.log("finalRoomDelete",finalRoomDelete )
         draft.loading = false
         draft.RegisteredRoom = state.RoomAfterDelete
         draft.RoomRegister = state.RoomAfterDelete

@@ -6,9 +6,28 @@ export const checkExitRoom = (arr: any, room: any): boolean => {
   return check
 }
 
-export const checkRoomDelete = (arr: any): Room => {
-  const finalArr = arr.filter(item => item.isDelete == false)
-  console.log("finalArr", finalArr)
 
-  return finalArr
+const checkDelete = (roomRegister,registeredRoom) => {
+  let check=false;
+  if(roomRegister.length!=registeredRoom.length){
+    check=false;
+  }
+  else{
+    for(let i=0;i<roomRegister.length;i++){
+      if(roomRegister[i].id==registeredRoom[i].id) check=true
+    }
+  }
+  return check;
+}
+
+export const checkDisable = (
+  roomRegister: any,
+  registeredRoom: any,
+  roomDelete: any
+): any => {
+  if (
+    checkDelete(roomRegister,registeredRoom) 
+  )
+    return true   // hiện click
+  return  false
 }
