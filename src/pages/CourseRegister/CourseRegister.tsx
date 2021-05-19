@@ -20,7 +20,7 @@ const mapStateToProps = (state: AppState) => ({
   roomList: state.courseList.Room,
   roomRegister: state.courseList.RoomRegister,
   registeredRoom: state.courseList.RegisteredRoom,
-  roomAfterDelete: state.courseList.RoomAfterDelete
+  roomAfterDelete: state.courseList.RoomDelete
 })
 
 const mapDispatchToProps = {
