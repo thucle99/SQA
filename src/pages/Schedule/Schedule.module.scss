@@ -1,0 +1,20 @@
+table {
+  border-color: #999999;
+  border-width: 1px;
+  border-style: Solid;
+  height: 100%;
+  width: 100%;
+  border-collapse: collapse;
+}
+td {
+  border: 1px solid black;
+  text-align: center;
+}
+thead > tr > td:not(:first-child, :last-child) {
+  color: White;
+  background-color: #6699cc;
+  border-width: 1px;
+  border-style: solid;
+  font-weight: bold;
+  color: White;
+}
