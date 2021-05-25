@@ -1,0 +1,30 @@
+// import styled from "styled-components"
+
+// export const LogoutIcon = styled.span``
+
+.menu {
+  background-color: white;
+  height: 70px;
+  align-items: center;
+  .logo {
+    padding-right: 200px;
+    padding-left: 50px;
+  }
+  display: flex;
+  .menuItem {
+    padding: 0px 10px;
+  }
+  .borderRadius {
+    border-radius: 30px;
+  }
+  .icon {
+    padding-top: 12px;
+  }
+  .iconStyle {
+    margin-right: 15px;
+  }
+  .profile {
+    position: absolute;
+    right: 30px;
+  }
+}

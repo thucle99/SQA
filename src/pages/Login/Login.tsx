@@ -1,9 +1,9 @@
 import React, { useState } from "react"
 import { connect, ConnectedProps } from "react-redux"
-import { login } from "./Login.thunks"
-import { Title } from "./Login.styles"
 import { useHistory } from "react-router-dom"
 import { PATH } from "src/constants/paths"
+import { Title } from "./Login.styles"
+import { login } from "./Login.thunks"
 
 const mapStateToProps = state => ({
   loading: state.loading
@@ -50,25 +50,33 @@ const Login = (props: Props) => {
       <div className="min-vh-100 row">
         <div className="col-md-6 m-auto">
           <form className="p-5 rounded-sm shadow text-center" onSubmit={submit}>
-            <Title>Login</Title>
-            <p className="text-muted">Please enter your login and password!</p>
+            <Title>Đăng nhập</Title>
+            <p className="text-muted">Nhập tài khoản và mật khẩu của bạn</p>
             <input
               type="text"
-              placeholder="Username"
+              name="user"
+              tabIndex={1}
+              autoFocus={true}
+              placeholder="Tài khoản"
               onChange={handleUsername}
               className="form-control form-control-lg mb-4"
             />
             <input
               type="password"
-              placeholder="Password"
+              tabIndex={2}
+              placeholder="Mật khẩu"
               onChange={handlePassword}
               className="form-control form-control-lg mb-4"
             />
             {error && (
               <div className="mb-3 text-danger text-xl-center">{error}</div>
             )}
-            <button type="submit" className="btn btn-block btn-info btn-lg">
-              Login
+            <button
+              type="submit"
+              tabIndex={3}
+              className="btn btn-block btn-primary btn-lg"
+            >
+              Đăng nhập
             </button>
           </form>
         </div>
