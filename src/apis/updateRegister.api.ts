@@ -12,12 +12,11 @@ export const updateRegisterRoomApi = (data): Promise<ResGetRoomApi> =>
           }
         })
         .then(res => {
-          console.log("sua dang ky", res.data)
-
+          // console.log("sua dang ky", res.data)
           resolve(res.data)
         })
         .catch(function (error) {
-          console.log(error)
+          reject(new Error(error))
         })
     }, 100)
   })

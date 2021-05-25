@@ -5,6 +5,7 @@
   .listSubject {
     display: flex;
     .title {
+      font-weight: bold;
       font-size: 20px;
     }
     .tableSubject {
@@ -12,12 +13,21 @@
       padding-bottom: 40px;
       border: 1px solid #cecece;
       width: 300px;
+      text-align: left;
       .subject {
+      text-align: left;
+        width: 100%;
+        outline: none;
+        background-color: #ffffff;
+        border: 0px;
         cursor: pointer;
         margin: 0px;
         padding: 2px 60px 2px 10px;
       }
       .subject:hover {
+        background-color: #cecece;
+      }
+      .subject:focus {
         background-color: #cecece;
       }
     }

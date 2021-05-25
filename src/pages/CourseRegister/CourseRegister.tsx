@@ -1,6 +1,6 @@
 import React, { useEffect } from "react"
 import { connect, ConnectedProps } from "react-redux"
-import { Popconfirm, message, Button } from "antd"
+import { Popconfirm, message, Button, notification } from "antd"
 import { QuestionCircleOutlined } from "@ant-design/icons"
 import MainLayout from "src/layouts/MainLayout"
 import {
@@ -20,7 +20,8 @@ const mapStateToProps = (state: AppState) => ({
   roomList: state.courseList.Room,
   roomRegister: state.courseList.RoomRegister,
   registeredRoom: state.courseList.RegisteredRoom,
-  roomDelete: state.courseList.RoomDelete
+  roomDelete: state.courseList.RoomDelete,
+  message: state.courseList.message
 })
 
 const mapDispatchToProps = {
@@ -55,19 +56,31 @@ const CourseRegister = (props: Props) => {
     roomList,
     roomRegister,
     registeredRoom,
-    roomDelete
+    roomDelete,
+    message
   } = props
+  const messageDefault="Cập nhật danh sách lớp học phần thành công"
 
+  const openNotification = placement => {
+    notification.success({
+      message: message ? message:messageDefault,
+      placement
+    })
+  }
+
+  const handleSaveRoom = data => {
+    registeredRoom[0]
+      ? updateRoom(data).then(() => openNotification("bottomLeft")
+)
+      : registerRoom(data).then(()=>openNotification("bottomLeft"))
+  }
+  const handleDeleteRoom = data => {
+    deleteRoom(data).then(()=> openNotification("bottomLeft"))
+  }
   useEffect(() => {
     getCourseList()
     getRegistrationList()
   }, [getCourseList])
-  const handleSaveRoom = data => {
-    registeredRoom[0] ? updateRoom(data) : registerRoom(data)
-  }
-  const handleDeleteRoom = data => {
-    deleteRoom(data)
-  }
 
   return (
     <MainLayout>
@@ -76,7 +89,9 @@ const CourseRegister = (props: Props) => {
           <p className={styles.title}>Danh sách môn học</p>
           <div className={styles.tableSubject}>
             {courseList.map((item, index) => (
-              <p
+              <button
+                autoFocus={item.id == 1 ? true : false}
+                type="button"
                 className={styles.subject}
                 key={index}
                 onClick={(event: React.MouseEvent<HTMLElement>) => {
@@ -85,7 +100,7 @@ const CourseRegister = (props: Props) => {
                 }}
               >
                 {item.ten}
-              </p>
+              </button>
             ))}
           </div>
         </div>
@@ -116,6 +131,7 @@ const CourseRegister = (props: Props) => {
                 >
                   <td>
                     <input
+                      // tabIndex={item.id}
                       type="checkbox"
                       checked={item.checked}
                       onChange={() => {
@@ -191,15 +207,18 @@ const CourseRegister = (props: Props) => {
             title="Bạn có chắc muốn lưu đăng ký không"
             onConfirm={() => handleSaveRoom(roomRegister)}
             okText="Lưu"
+            disabled={checkDisable(roomRegister, registeredRoom, roomDelete)}
             cancelText="Hủy"
           >
             {/* <Button disabled={roomRegister==registeredRoom 
                 || roomDelete.length!=0 ? true:false}>
                 Lưu đăng ký
                 </Button> */}
-                 <Button disabled={checkDisable(roomRegister,registeredRoom,roomDelete)}>
-                Lưu đăng ký
-                </Button>
+            <Button
+              disabled={checkDisable(roomRegister, registeredRoom, roomDelete)}
+            >
+              Lưu đăng ký
+            </Button>
           </Popconfirm>
 
           <Popconfirm
@@ -207,10 +226,13 @@ const CourseRegister = (props: Props) => {
             title="Bạn có chắc muốn xóa môn học không？"
             okText="Xóa"
             cancelText="Hủy"
+            disabled={roomDelete.length == 0 ? true : false}
             onConfirm={() => handleDeleteRoom(roomDelete)}
             icon={<QuestionCircleOutlined style={{ color: "red" }} />}
           >
-            <Button disabled={roomDelete.length==0 ? true:false}>Xóa</Button>
+            <Button disabled={roomDelete.length == 0 ? true : false}>
+              Xóa
+            </Button>
           </Popconfirm>
         </div>
       </div>

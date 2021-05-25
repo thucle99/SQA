@@ -11,6 +11,7 @@ export const loginApi = ({
           password
         })
         .then(res => {
+          localStorage.setItem("username", username)
           resolve({
             data: {
               access_token: res.data.accessToken

@@ -13,7 +13,7 @@ export const getCourseApi = (): Promise<ResGetCourseApi> =>
           resolve(res.data)
         })
         .catch(function (error) {
-          console.log(error)
+          reject(new Error(error))
         })
     }, 100)
   })

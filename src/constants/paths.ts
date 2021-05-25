@@ -2,5 +2,6 @@ export const PATH = {
   HOME: "/",
   PRODUCT: "/product",
   LOGIN: "/login",
-  CourseRegister: "/courseRegister"
+  CourseRegister: "/courseRegister",
+  Schedule: "/schedule"
 }

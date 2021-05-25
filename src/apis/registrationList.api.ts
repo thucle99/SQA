@@ -11,10 +11,10 @@ export const getRegistrationListApi = (): Promise<ResGetRoomApi> =>
         })
         .then(res => {
           resolve(res.data)
-          console.log("lịch học đã đăng ký...", res.data)
+          // console.log("lịch học đã đăng ký...", res.data)
         })
         .catch(function (error) {
-          console.log(error)
+          reject(new Error(error))
         })
     }, 100)
   })

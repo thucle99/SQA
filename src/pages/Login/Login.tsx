@@ -54,12 +54,16 @@ const Login = (props: Props) => {
             <p className="text-muted">Nhập tài khoản và mật khẩu của bạn</p>
             <input
               type="text"
+              name="user"
+              tabIndex={1}
+              autoFocus={true}
               placeholder="Tài khoản"
               onChange={handleUsername}
               className="form-control form-control-lg mb-4"
             />
             <input
               type="password"
+              tabIndex={2}
               placeholder="Mật khẩu"
               onChange={handlePassword}
               className="form-control form-control-lg mb-4"
@@ -67,7 +71,11 @@ const Login = (props: Props) => {
             {error && (
               <div className="mb-3 text-danger text-xl-center">{error}</div>
             )}
-            <button type="submit" className="btn btn-block btn-info btn-lg">
+            <button
+              type="submit"
+              tabIndex={3}
+              className="btn btn-block btn-primary btn-lg"
+            >
               Đăng nhập
             </button>
           </form>

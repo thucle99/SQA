@@ -1,3 +1,4 @@
+import { message } from "antd"
 import * as types from "./CourseRegister.constants"
 import produce from "immer"
 
@@ -7,8 +8,10 @@ const initialState = {
   Room: [] as Room[], // list room
   RoomRegister: [] as Room[], // list room selected
   RegisteredRoom: [] as Room[], // list room is registered
-  RoomDelete: [] as Room[],  // Room xóa
-  RoomAfterDelete: [] as Room[]  // Room còn lại
+  RoomDelete: [] as Room[], // Room xóa
+  RoomAfterDelete: [] as Room[], // Room còn lại
+  message: "",
+  err: ""
 }
 
 export const CourseListReducer = (state = initialState, action) =>
@@ -36,7 +39,7 @@ export const CourseListReducer = (state = initialState, action) =>
           return item
         })
         break
-      // check id trùng trong roon chọn thì check=true( check mảng trong mảng)
+      // check id trùng trong room chọn thì check=true( check mảng trong mảng)
 
       case types.REGISTRATION_LIST_ROOM_REQUESTED:
         draft.loading = true
@@ -69,7 +72,7 @@ export const CourseListReducer = (state = initialState, action) =>
             isExits = true
             return { ...item, checked: !item.checked }
           } else {
-            return { ...item}
+            return { ...item }
           }
         })
         // trả về false nếu có tên trong list chọn đăng ký
@@ -79,24 +82,24 @@ export const CourseListReducer = (state = initialState, action) =>
         draft.loading = false
         draft.Room = state.Room.map(item => {
           return item.id === action.payload.id
-            ? { ...item, checked: !item.checked}
+            ? { ...item, checked: !item.checked }
             : { ...item }
           // bắt sự kiện click trùng tên thì đổi checked
         })
-        draft.RoomRegister = data.filter(item => item.checked == true)
+        draft.RoomRegister = data.filter(item => item.checked === true)
         break
 
       case types.UPDATE_ROOM_REQUESTED:
         draft.loading = true
         break
       case types.UPDATE_ROOM_SUCCESS:
-        const dataUpdate=state.RoomRegister.map(item=>{
-          return {...item,daDK:true}
+        const dataUpdate = state.RoomRegister.map(item => {
+          return { ...item, daDK: true }
         })
-        // console.log("Room",state.Room);
+        console.log("sua dang ky", action.payload)
         // console.log("RegisteredRoom",dataUpdate);
         // console.log("RoomRegister",dataUpdate);
-        
+        draft.message = action.payload
         draft.loading = false
         draft.RegisteredRoom = dataUpdate
         draft.RoomRegister = dataUpdate
@@ -117,7 +120,7 @@ export const CourseListReducer = (state = initialState, action) =>
             isExitsDelete = true
             return { ...item, isDelete: !item.isDelete }
           } else {
-            return { ...item}
+            return { ...item }
           }
         })
         // trả về false nếu có tên trong list chọn đăng ký
@@ -126,7 +129,6 @@ export const CourseListReducer = (state = initialState, action) =>
         // console.log("data còn lại", dataDelete.filter(item => item.isDelete == false))
         // console.log("RegisteredRoom", state.RegisteredRoom);
         // console.log("RoomRegister", dataDelete);
-        
 
         // const dataConLai=action.payload.map(item => {
         //   item.isDelete = false
@@ -141,19 +143,26 @@ export const CourseListReducer = (state = initialState, action) =>
         //     : { ...item }
         // })
         draft.RoomRegister = dataDelete
-        draft.RoomAfterDelete=dataDelete.filter(item => item.isDelete == false)
-        draft.RoomDelete =dataDelete.filter(item => item.isDelete == true)
+        draft.RoomAfterDelete = dataDelete.filter(
+          item => item.isDelete === false
+        )
+        draft.RoomDelete = dataDelete.filter(item => item.isDelete === true)
         break
 
       case types.DELETE_ROOM_REQUESTED:
         draft.loading = true
         break
       case types.DELETE_ROOM_SUCCESS:
-        const finalRoomDelete= state.Room.map(item => {
+        const finalRoomDelete = state.Room.map(item => {
           // item.isDelete = false
           if (state.RoomDelete.some(obj => obj.id === item.id)) {
-            return {...item,checked :false,isDelete : !item.isDelete,daDK:false}
-          } else  return {...item}
+            return {
+              ...item,
+              checked: false,
+              isDelete: !item.isDelete,
+              daDK: false
+            }
+          } else return { ...item }
         })
         // console.log("Room",finalRoomDelete);
         // console.log("RegisteredRoom", state.RoomAfterDelete);
@@ -163,9 +172,9 @@ export const CourseListReducer = (state = initialState, action) =>
         draft.loading = false
         draft.RegisteredRoom = state.RoomAfterDelete
         draft.RoomRegister = state.RoomAfterDelete
-        draft.Room=finalRoomDelete
-        draft.RoomDelete=[]
-        draft.RoomAfterDelete=[]
+        draft.Room = finalRoomDelete
+        draft.RoomDelete = []
+        draft.RoomAfterDelete = []
         break
 
       case types.GET_ITEM_FAILED:

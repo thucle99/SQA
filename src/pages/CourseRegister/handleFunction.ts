@@ -1,23 +1,21 @@
 export const checkExitRoom = (arr: any, room: any): boolean => {
   let check = false
   arr.map(item => {
-    if (item.id == room.id) check = true
+    if (item.id === room.id) check = true
   })
   return check
 }
 
-
-const checkDelete = (roomRegister,registeredRoom) => {
-  let check=false;
-  if(roomRegister.length!=registeredRoom.length){
-    check=false;
-  }
-  else{
-    for(let i=0;i<roomRegister.length;i++){
-      if(roomRegister[i].id==registeredRoom[i].id) check=true
+const checkDelete = (roomRegister, registeredRoom) => {
+  let check = false
+  if (roomRegister.length !== registeredRoom.length) {
+    check = false
+  } else {
+    for (let i = 0; i < roomRegister.length; i++) {
+      if (roomRegister[i].id === registeredRoom[i].id) check = true
     }
   }
-  return check;
+  return check
 }
 
 export const checkDisable = (
@@ -25,9 +23,6 @@ export const checkDisable = (
   registeredRoom: any,
   roomDelete: any
 ): any => {
-  if (
-    checkDelete(roomRegister,registeredRoom) 
-  )
-    return true   // hiện click
-  return  false
+  if (checkDelete(roomRegister, registeredRoom)) return true // hiện click
+  return false
 }

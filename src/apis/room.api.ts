@@ -11,10 +11,10 @@ export const getRoomApi = (id): Promise<ResGetRoomApi> =>
         })
         .then(res => {
           resolve(res.data)
-          console.log("list phòng", res.data)
+          // console.log("list phòng", res.data)
         })
         .catch(function (error) {
-          console.log(error)
+          reject(new Error(error))
         })
     }, 100)
   })
