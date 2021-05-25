@@ -12,12 +12,11 @@ export const UPDATE_ROOM_REQUESTED = "views/login/UPDATE_ROOM_REQUESTED"
 export const UPDATE_ROOM_SUCCESS = "views/login/UPDATE_ROOM_SUCCESS"
 export const SELECT_ROOM_DELETE = "views/login/SELECT_ROOM_DELETE"
 
-export const DELETE_ROOM_REQUESTED = "views/login/DELETE_ROOM_REQUESTED"
-export const DELETE_ROOM_SUCCESS = "views/login/DELETE_ROOM_SUCCESS"
-
 export const REGISTRATION_LIST_ROOM_REQUESTED =
   "views/login/REGISTRATION_LIST_ROOM_REQUESTED"
 export const REGISTRATION_LIS_ROOM_SUCCESS =
   "views/login/REGISTRATION_LIS_ROOM_SUCCESS"
 
 export const GET_ITEM_FAILED = "views/login/GET_ITEM_FAILED"
+
+export const ERROR_MESSAGE = "Có lớp học phần bị trùng, vui lòng thử lại"

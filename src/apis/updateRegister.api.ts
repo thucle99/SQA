@@ -3,7 +3,7 @@ const token = localStorage.getItem("token")
 export const updateRegisterRoomApi = (data): Promise<ResGetRoomApi> =>
   new Promise((resolve, reject) => {
     setTimeout(() => {
-      console.log("data sua dang ky", data)
+      // console.log("data sua dang ky", data)
 
       axios
         .put("http://localhost:8080/suadangky", data, {

@@ -20,7 +20,9 @@ export default function MainLayout(props: Props) {
           <Navigation />
         </Header>
         <Layout>{children}</Layout>
-        <Footer style={{ textAlign: "center" }}>Design by 105C7</Footer>
+        <Footer style={{ textAlign: "center" }}>
+          Copyright ©2021 Cơ Sở Miền Bắc
+        </Footer>
       </Layout>
     </div>
   )

@@ -1,6 +1,7 @@
+import produce from "immer"
 import { message } from "antd"
 import * as types from "./CourseRegister.constants"
-import produce from "immer"
+import { checkUpdateData, checkSchedule } from "./handleFunction"
 
 const initialState = {
   loading: false,
@@ -8,10 +9,12 @@ const initialState = {
   Room: [] as Room[], // list room
   RoomRegister: [] as Room[], // list room selected
   RegisteredRoom: [] as Room[], // list room is registered
-  RoomDelete: [] as Room[], // Room xóa
-  RoomAfterDelete: [] as Room[], // Room còn lại
-  message: "",
-  err: ""
+  messageSuccess: "",
+  error: ""
+}
+
+const warning = () => {
+  message.warning(types.ERROR_MESSAGE)
 }
 
 export const CourseListReducer = (state = initialState, action) =>
@@ -59,33 +62,34 @@ export const CourseListReducer = (state = initialState, action) =>
 
       case types.SELECT_ROOM:
         let isExits = false
-        let data = state.RoomRegister.map(item => {
-          // if (item.id === action.payload.id) {
-          //   // trùng id
-          //   isExits = true
-          //   return { ...item, checked: false }
-          // } else {
-          //   return { ...item, checked: true }
-          // }
-          if (item.id === action.payload.id) {
-            // trùng id
-            isExits = true
-            return { ...item, checked: !item.checked }
-          } else {
-            return { ...item }
-          }
-        })
-        // trả về false nếu có tên trong list chọn đăng ký
-        if (!isExits) data.push({ ...action.payload, checked: true })
-        // console.log("RegisteredRoom", state.RegisteredRoom);
-        // console.log("RoomRegister", data);
+        let data: any
+        let roomSelect: any
+        if (checkSchedule(state.RoomRegister, action.payload) == true) {
+          roomSelect = state.Room
+          data = state.RoomRegister
+          warning()
+        } else {
+          data = state.RoomRegister.map(item => {
+            if (item.id === action.payload.id) {
+              // trùng id
+              isExits = true
+              return { ...item, checked: !item.checked }
+            } else {
+              return { ...item }
+            }
+          })
+          // trả về false nếu có tên trong list chọn đăng ký
+          if (!isExits) data.push({ ...action.payload, checked: true })
+
+          roomSelect = state.Room.map(item => {
+            return item.id === action.payload.id
+              ? { ...item, checked: !item.checked }
+              : { ...item }
+            // bắt sự kiện click trùng tên thì đổi checked
+          })
+        }
         draft.loading = false
-        draft.Room = state.Room.map(item => {
-          return item.id === action.payload.id
-            ? { ...item, checked: !item.checked }
-            : { ...item }
-          // bắt sự kiện click trùng tên thì đổi checked
-        })
+        draft.Room = roomSelect
         draft.RoomRegister = data.filter(item => item.checked === true)
         break
 
@@ -96,85 +100,20 @@ export const CourseListReducer = (state = initialState, action) =>
         const dataUpdate = state.RoomRegister.map(item => {
           return { ...item, daDK: true }
         })
-        console.log("sua dang ky", action.payload)
-        // console.log("RegisteredRoom",dataUpdate);
-        // console.log("RoomRegister",dataUpdate);
-        draft.message = action.payload
+
+        draft.messageSuccess = action.payload
         draft.loading = false
         draft.RegisteredRoom = dataUpdate
         draft.RoomRegister = dataUpdate
-        break
-
-      case types.SELECT_ROOM_DELETE:
-        let isExitsDelete = false
-        let dataDelete = state.RoomRegister.map(item => {
-          // if (item.id === action.payload.id) {
-          //   // trùng id
-          //   isExits = true
-          //   return { ...item, checked: false }
-          // } else {
-          //   return { ...item, checked: true }
-          // }
-          if (item.id === action.payload.id) {
-            // trùng id
-            isExitsDelete = true
-            return { ...item, isDelete: !item.isDelete }
-          } else {
-            return { ...item }
-          }
+        draft.Room = state.Room.map(item => {
+          if (
+            checkUpdateData(dataUpdate, state.RegisteredRoom).some(
+              obj => obj.id === item.id
+            )
+          ) {
+            return { ...item, daDK: false }
+          } else return item
         })
-        // trả về false nếu có tên trong list chọn đăng ký
-        // if (!isExitsDelete) dataDelete.push({ ...action.payload, checked: true })
-        // console.log("data xóa", dataDelete.filter(item => item.isDelete == true))
-        // console.log("data còn lại", dataDelete.filter(item => item.isDelete == false))
-        // console.log("RegisteredRoom", state.RegisteredRoom);
-        // console.log("RoomRegister", dataDelete);
-
-        // const dataConLai=action.payload.map(item => {
-        //   item.isDelete = false
-        //   if (state.RoomRegister.some(obj => obj.id === item.id)) {
-        //     item.checked = true
-        //   } else item.checked = false
-        //   return item
-        // })
-        // const dataDelete = state.RoomRegister.map(item => {
-        //   return item.id === action.payload.id
-        //     ? { ...item, isDelete:  !item.isDelete }
-        //     : { ...item }
-        // })
-        draft.RoomRegister = dataDelete
-        draft.RoomAfterDelete = dataDelete.filter(
-          item => item.isDelete === false
-        )
-        draft.RoomDelete = dataDelete.filter(item => item.isDelete === true)
-        break
-
-      case types.DELETE_ROOM_REQUESTED:
-        draft.loading = true
-        break
-      case types.DELETE_ROOM_SUCCESS:
-        const finalRoomDelete = state.Room.map(item => {
-          // item.isDelete = false
-          if (state.RoomDelete.some(obj => obj.id === item.id)) {
-            return {
-              ...item,
-              checked: false,
-              isDelete: !item.isDelete,
-              daDK: false
-            }
-          } else return { ...item }
-        })
-        // console.log("Room",finalRoomDelete);
-        // console.log("RegisteredRoom", state.RoomAfterDelete);
-        // console.log("RoomRegister", state.RoomAfterDelete);
-        // // check nếu RoomDelete có trong Room
-        // console.log("finalRoomDelete",finalRoomDelete )
-        draft.loading = false
-        draft.RegisteredRoom = state.RoomAfterDelete
-        draft.RoomRegister = state.RoomAfterDelete
-        draft.Room = finalRoomDelete
-        draft.RoomDelete = []
-        draft.RoomAfterDelete = []
         break
 
       case types.GET_ITEM_FAILED:

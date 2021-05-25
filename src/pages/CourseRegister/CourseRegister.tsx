@@ -1,27 +1,24 @@
+import { Button, notification, Popconfirm } from "antd"
 import React, { useEffect } from "react"
 import { connect, ConnectedProps } from "react-redux"
-import { Popconfirm, message, Button, notification } from "antd"
-import { QuestionCircleOutlined } from "@ant-design/icons"
 import MainLayout from "src/layouts/MainLayout"
-import {
-  getCourseList,
-  getRoomList,
-  getRegistrationList,
-  registerRoom,
-  updateRoom,
-  deleteRoom
-} from "./CourseRegister.thunks"
-import { checkExitRoom, checkDisable } from "./handleFunction"
 import * as actions from "./CourseRegister.action"
 import styles from "./CourseRegister.module.scss"
+import {
+  getCourseList,
+  getRegistrationList,
+  getRoomList,
+  registerRoom,
+  updateRoom
+} from "./CourseRegister.thunks"
+import { checkDisable, checkExitRoom } from "./handleFunction"
 
 const mapStateToProps = (state: AppState) => ({
   courseList: state.courseList.Course,
   roomList: state.courseList.Room,
   roomRegister: state.courseList.RoomRegister,
   registeredRoom: state.courseList.RegisteredRoom,
-  roomDelete: state.courseList.RoomDelete,
-  message: state.courseList.message
+  messageSuccess: state.courseList.messageSuccess
 })
 
 const mapDispatchToProps = {
@@ -30,7 +27,6 @@ const mapDispatchToProps = {
   getRegistrationList,
   registerRoom,
   updateRoom,
-  deleteRoom,
   selectRoom: (payload: Room) => dispatch => {
     return dispatch(actions.selectRoom(payload))
   },
@@ -50,33 +46,27 @@ const CourseRegister = (props: Props) => {
     selectRoom,
     registerRoom,
     updateRoom,
-    deleteRoom,
-    selectRoomDelete,
     courseList,
     roomList,
     roomRegister,
     registeredRoom,
-    roomDelete,
-    message
+    messageSuccess
   } = props
-  const messageDefault="Cập nhật danh sách lớp học phần thành công"
+  const messageDefault = "Cập nhật danh sách lớp học phần thành công"
 
   const openNotification = placement => {
     notification.success({
-      message: message ? message:messageDefault,
+      message: messageSuccess ? messageSuccess : messageDefault,
       placement
     })
   }
 
   const handleSaveRoom = data => {
     registeredRoom[0]
-      ? updateRoom(data).then(() => openNotification("bottomLeft")
-)
-      : registerRoom(data).then(()=>openNotification("bottomLeft"))
+      ? updateRoom(data).then(() => openNotification("bottomLeft"))
+      : registerRoom(data).then(() => openNotification("bottomLeft"))
   }
-  const handleDeleteRoom = data => {
-    deleteRoom(data).then(()=> openNotification("bottomLeft"))
-  }
+
   useEffect(() => {
     getCourseList()
     getRegistrationList()
@@ -131,7 +121,6 @@ const CourseRegister = (props: Props) => {
                 >
                   <td>
                     <input
-                      // tabIndex={item.id}
                       type="checkbox"
                       checked={item.checked}
                       onChange={() => {
@@ -171,7 +160,6 @@ const CourseRegister = (props: Props) => {
                   <th>Phòng học</th>
                   <th>Thứ</th>
                   <th>Tuần</th>
-                  <th></th>
                 </tr>
               </thead>
               <tbody>
@@ -186,15 +174,6 @@ const CourseRegister = (props: Props) => {
                     <td>{item.phong}</td>
                     <td>{item.ngayHoc}</td>
                     <td>{item.tuanHoc.toString()}</td>
-                    <td>
-                      <input
-                        type="checkbox"
-                        checked={item.isDelete}
-                        onChange={() => {
-                          selectRoomDelete(item)
-                        }}
-                      />
-                    </td>
                   </tr>
                 ))}
               </tbody>
@@ -207,31 +186,11 @@ const CourseRegister = (props: Props) => {
             title="Bạn có chắc muốn lưu đăng ký không"
             onConfirm={() => handleSaveRoom(roomRegister)}
             okText="Lưu"
-            disabled={checkDisable(roomRegister, registeredRoom, roomDelete)}
+            disabled={checkDisable(roomRegister, registeredRoom)}
             cancelText="Hủy"
           >
-            {/* <Button disabled={roomRegister==registeredRoom 
-                || roomDelete.length!=0 ? true:false}>
-                Lưu đăng ký
-                </Button> */}
-            <Button
-              disabled={checkDisable(roomRegister, registeredRoom, roomDelete)}
-            >
+            <Button disabled={checkDisable(roomRegister, registeredRoom)}>
               Lưu đăng ký
-            </Button>
-          </Popconfirm>
-
-          <Popconfirm
-            placement="topRight"
-            title="Bạn có chắc muốn xóa môn học không？"
-            okText="Xóa"
-            cancelText="Hủy"
-            disabled={roomDelete.length == 0 ? true : false}
-            onConfirm={() => handleDeleteRoom(roomDelete)}
-            icon={<QuestionCircleOutlined style={{ color: "red" }} />}
-          >
-            <Button disabled={roomDelete.length == 0 ? true : false}>
-              Xóa
             </Button>
           </Popconfirm>
         </div>
