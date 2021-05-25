@@ -1,5 +1,5 @@
 import React from "react"
-import { Table } from "antd"
+import { Table, Button, Row } from "antd"
 import { connect, ConnectedProps } from "react-redux"
 import MainLayout from "src/layouts/MainLayout"
 import TableRow from "src/pages/Schedule/TableRow/TableRow"
@@ -59,6 +59,12 @@ const Schedule = (props: Props) => {
           </tr>
         </thead>
       </table>
+      <div className="group__btn">
+        <Button>Tuần đầu</Button>
+        <Button>Tuần trước</Button>
+        <Button>Tuần kế</Button>
+        <Button>Tuần cuối</Button>
+      </div>
     </div>
   )
 }

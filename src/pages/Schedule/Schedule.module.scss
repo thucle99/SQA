@@ -18,3 +18,8 @@ thead > tr > td:not(:first-child, :last-child) {
   font-weight: bold;
   color: White;
 }
+.group__btn {
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
+}
