@@ -101,6 +101,17 @@ export const CourseListReducer = (state = initialState, action) =>
           return { ...item, daDK: true }
         })
 
+        // console.log("room",state.Room.map(item => {
+        //     if (
+        //       checkUpdateData(dataUpdate, state.RegisteredRoom).some(
+        //         obj => obj.id === item.id
+        //       )
+        //     ) {
+        //       return { ...item, daDK: false }
+        //     } else return item
+        //   }));
+        console.log("dataUpdate", dataUpdate)
+
         draft.messageSuccess = action.payload
         draft.loading = false
         draft.RegisteredRoom = dataUpdate
