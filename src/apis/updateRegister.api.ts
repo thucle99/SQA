@@ -1,5 +1,13 @@
 import axios from "axios"
+// import { notification} from "antd"
+// const openNotification = (placement, message) => {
+//   notification.success({
+//     message,
+//     placement
+//   })
+// }
 const token = localStorage.getItem("token")
+
 export const updateRegisterRoomApi = (data): Promise<ResGetRoomApi> =>
   new Promise((resolve, reject) => {
     setTimeout(() => {
@@ -14,6 +22,7 @@ export const updateRegisterRoomApi = (data): Promise<ResGetRoomApi> =>
         .then(res => {
           // console.log("sua dang ky", res.data)
           resolve(res.data)
+          // openNotification("bottomLeft",res.data)
         })
         .catch(function (error) {
           reject(new Error(error))
