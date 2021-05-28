@@ -31,7 +31,7 @@ const Schedule = (props: Props) => {
     LessonSeven
   } = props
   useEffect(() => {
-    // getRegistrationList()
+    getRegistrationList()
   }, [getRegistrationList])
   return (
     <MainLayout>
