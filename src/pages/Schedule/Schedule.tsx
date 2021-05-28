@@ -4,10 +4,12 @@ import { connect, ConnectedProps } from "react-redux"
 import MainLayout from "src/layouts/MainLayout"
 import TableRow from "src/pages/Schedule/TableRow/TableRow"
 import { getRegistrationList } from "./Schedule.thunks"
+import * as actions from "./Schedule.action"
 import styles from "./Schedule.module.scss"
 
 const mapStateToProps = (state: AppState) => ({
   registeredRoom: state.schedule.RegisteredRoom,
+  page: state.schedule.page,
   LessonOne: state.schedule.LessonOne,
   LessonThree: state.schedule.LessonThree,
   LessonFive: state.schedule.LessonFive,
@@ -15,7 +17,19 @@ const mapStateToProps = (state: AppState) => ({
 })
 
 const mapDispatchToProps = {
-  getRegistrationList
+  getRegistrationList,
+  firstSchedule: (payload: number) => dispatch => {
+    return dispatch(actions.firstSchedule(payload))
+  },
+  backSchedule: (payload: number) => dispatch => {
+    return dispatch(actions.backSchedule(payload))
+  },
+  nextSchedule: (payload: number) => dispatch => {
+    return dispatch(actions.nextSchedule(payload))
+  },
+  endSchedule: (payload: number) => dispatch => {
+    return dispatch(actions.endSchedule(payload))
+  }
 }
 
 const connector = connect(mapStateToProps, mapDispatchToProps)
@@ -24,11 +38,15 @@ interface Props extends ConnectedProps<typeof connector> {}
 const Schedule = (props: Props) => {
   const {
     getRegistrationList,
-    registeredRoom,
+    page,
     LessonOne,
     LessonThree,
     LessonFive,
-    LessonSeven
+    LessonSeven,
+    firstSchedule,
+    backSchedule,
+    nextSchedule,
+    endSchedule
   } = props
   useEffect(() => {
     getRegistrationList()
@@ -36,7 +54,10 @@ const Schedule = (props: Props) => {
   return (
     <MainLayout>
       <div className={styles.content}>
-        <p className={styles.title}>Thông tin thời khóa biểu</p>
+        <div className={styles.header__schedule}>
+          <p className={styles.title}>Thông tin thời khóa biểu</p>
+          <p className={styles.page}>Tuần :{page}</p>
+        </div>
         <table>
           <thead>
             <tr>
@@ -76,10 +97,20 @@ const Schedule = (props: Props) => {
           </thead>
         </table>
         <div className={styles.group__btn}>
-          <Button>Tuần đầu</Button>
-          <Button>Tuần trước</Button>
-          <Button>Tuần kế</Button>
-          <Button>Tuần cuối</Button>
+          <Button onClick={() => firstSchedule(page)}>Tuần đầu</Button>
+          <Button
+            disabled={page == 1 ? true : false}
+            onClick={() => backSchedule(page)}
+          >
+            Tuần trước
+          </Button>
+          <Button
+            onClick={() => nextSchedule(page)}
+            disabled={page == 16 ? true : false}
+          >
+            Tuần kế
+          </Button>
+          <Button onClick={() => endSchedule(page)}>Tuần cuối</Button>
         </div>
       </div>
     </MainLayout>

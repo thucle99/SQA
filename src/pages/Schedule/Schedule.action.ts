@@ -11,6 +11,34 @@ export const registerListRoomSuccess = payload => {
 }
 // List of registered subjects
 
+export const firstSchedule = payload => {
+  return {
+    type: types.FIRST_SCHEDULE,
+    payload
+  }
+}
+
+export const nextSchedule = payload => {
+  return {
+    type: types.NEXT_SCHEDULE,
+    payload
+  }
+}
+
+export const backSchedule = payload => {
+  return {
+    type: types.BACK_SCHEDULE,
+    payload
+  }
+}
+
+export const endSchedule = payload => {
+  return {
+    type: types.END_SCHEDULE,
+    payload
+  }
+}
+
 export const getItemFailed = payload => ({
   type: types.GET_ITEM_FAILED,
   payload

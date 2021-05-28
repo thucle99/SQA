@@ -4,6 +4,7 @@ import * as types from "./Schedule.constants"
 const initialState = {
   loading: false,
   RegisteredRoom: [] as Room[],
+  page: 1,
   LessonOne: [{}, {}, {}, {}, {}, {}, {}],
   LessonThree: [{}, {}, {}, {}, {}, {}, {}],
   LessonFive: [{}, {}, {}, {}, {}, {}, {}],
@@ -19,7 +20,7 @@ export const ScheduleReducer = (state = initialState, action) =>
         break
       case types.REGISTRATION_LIS_ROOM_SUCCESS:
         let ArrSchedule = [
-          [{}, {}, {}, {}, {}, {}, {}],
+          [{}, {}, {}, {}, {}, {}, {}], // tiết 1
           [{}, {}, {}, {}, {}, {}, {}],
           [{}, {}, {}, {}, {}, {}, {}],
           [{}, {}, {}, {}, {}, {}, {}],
@@ -37,10 +38,26 @@ export const ScheduleReducer = (state = initialState, action) =>
         draft.LessonThree = ArrSchedule[3]
         draft.LessonFive = ArrSchedule[5]
         draft.LessonSeven = ArrSchedule[7]
-
         draft.loading = false
         draft.RegisteredRoom = action.payload
+        break
 
+      case types.FIRST_SCHEDULE:
+        draft.page = 1
+        break
+
+      case types.NEXT_SCHEDULE:
+        console.log("vao day")
+
+        draft.page = state.page + 1
+        break
+
+      case types.BACK_SCHEDULE:
+        draft.page = state.page - 1
+        break
+
+      case types.END_SCHEDULE:
+        draft.page = 16
         break
       default:
         return state
