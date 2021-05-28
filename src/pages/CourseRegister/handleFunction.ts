@@ -25,20 +25,21 @@ export const checkDisable = (roomRegister: any, registeredRoom: any): any => {
 
 export const checkUpdateData = (dataUpdate: any, RegisteredRoom: any): any => {
   const dataDisable: any = []
+
   if (dataUpdate.length > RegisteredRoom.length) {
     for (let i = 0; i < dataUpdate.length; i++) {
-      if (RegisteredRoom.some(obj => obj.id == dataUpdate[i].id)) {
-        return
-      } else {
-        dataDisable.push(dataUpdate[i])
+      for (let j = 0; j < RegisteredRoom.length; j++) {
+        if (dataUpdate[i].id !== RegisteredRoom[j].id) {
+          dataDisable.push(dataUpdate[i])
+        }
       }
     }
   } else {
     for (let i = 0; i < RegisteredRoom.length; i++) {
-      if (dataUpdate.some(obj => obj.id == RegisteredRoom[i].id)) {
-        return
-      } else {
-        dataDisable.push(RegisteredRoom[i])
+      for (let j = 0; j < dataUpdate.length; j++) {
+        if (RegisteredRoom[i].id !== dataUpdate[j].id) {
+          dataDisable.push(RegisteredRoom[i])
+        }
       }
     }
   }
@@ -49,8 +50,8 @@ export const checkSchedule = (roomRegister: any, arr: any): boolean => {
   let checkSchedule = false
   roomRegister.map(item => {
     if (
-      item.ngayHoc[0] == arr.ngayHoc[0] &&
-      item.kipHoc[0] == arr.kipHoc[0] &&
+      item.ngayHoc[0] === arr.ngayHoc[0] &&
+      item.kipHoc[0] === arr.kipHoc[0] &&
       item.id != arr.id
     )
       checkSchedule = true
